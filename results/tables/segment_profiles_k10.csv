@@ -1,0 +1,11 @@
+Cluster,customers,mean_recency,median_recency,mean_frequency,median_frequency,mean_monetary,median_monetary,percentage,description
+0,356,147.26123595505618,139.0,2.8623595505617976,3.0,1319.9531488764044,923.87,8.206546795758413,"less recent, higher frequency, higher spending (relative to overall customer medians)"
+1,701,31.674750356633382,23.0,5.827389443651926,6.0,2373.2441369472185,2044.8700000000001,16.15952051636699,"more recent, higher frequency, higher spending (relative to overall customer medians)"
+2,362,180.72099447513813,180.0,1.287292817679558,1.0,226.7691988950276,206.68,8.344859382203781,"less recent, lower frequency, lower spending (relative to overall customer medians)"
+3,712,48.91151685393258,47.0,1.502808988764045,1.0,487.2705491573034,419.13,16.413093591516827,"more recent, lower frequency, lower spending (relative to overall customer medians)"
+4,99,10.393939393939394,4.0,37.44444444444444,28.0,31680.46373737374,15610.390000000001,2.2821576763485476,"more recent, higher frequency, higher spending (relative to overall customer medians)"
+5,394,45.93908629441624,41.0,1.1979695431472082,1.0,154.4444162436548,157.87,9.082526509912402,"more recent, lower frequency, lower spending (relative to overall customer medians)"
+6,372,19.870967741935484,12.0,12.298387096774194,11.5,5582.033252688172,4370.8150000000005,8.575380359612724,"more recent, higher frequency, higher spending (relative to overall customer medians)"
+7,739,32.757780784844385,27.0,3.2043301759133964,3.0,991.8845493910691,885.8,17.035500230520977,"more recent, higher frequency, higher spending (relative to overall customer medians)"
+8,299,270.88963210702343,267.0,1.5150501672240804,1.0,877.1518060200669,478.53000000000003,6.892577224527432,"less recent, lower frequency, lower spending (relative to overall customer medians)"
+9,304,319.38157894736844,320.0,1.042763157894737,1.0,182.99309210526317,166.64499999999998,7.007837713231904,"less recent, lower frequency, lower spending (relative to overall customer medians)"

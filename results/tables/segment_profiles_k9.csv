@@ -1,0 +1,10 @@
+Cluster,customers,mean_recency,median_recency,mean_frequency,median_frequency,mean_monetary,median_monetary,percentage,description
+0,378,19.814814814814813,12.0,12.224867724867725,11.0,5555.095873015874,4331.635,8.71369294605809,"more recent, higher frequency, higher spending (relative to overall customer medians)"
+1,460,310.95,309.0,1.1478260869565218,1.0,314.7307173913044,260.435,10.603964960811433,"less recent, lower frequency, lower spending (relative to overall customer medians)"
+2,733,50.77216916780355,50.0,1.52387448840382,1.0,500.5833028649386,430.5,16.89718764407561,"more recent, lower frequency, lower spending (relative to overall customer medians)"
+3,781,38.31754161331626,30.0,3.1920614596670935,3.0,1014.1246248399489,912.18,18.003688335638543,"more recent, higher frequency, higher spending (relative to overall customer medians)"
+4,412,46.070388349514566,41.0,1.2063106796116505,1.0,158.15211165048544,161.705,9.497464269248502,"more recent, lower frequency, lower spending (relative to overall customer medians)"
+5,356,183.26123595505618,174.0,2.5842696629213484,2.0,1446.0143567415732,835.285,8.206546795758413,"less recent, lower frequency, higher spending (relative to overall customer medians)"
+6,716,33.402234636871505,23.0,5.7863128491620115,6.0,2339.8870391061455,2007.435,16.505301982480407,"more recent, higher frequency, higher spending (relative to overall customer medians)"
+7,99,10.393939393939394,4.0,37.44444444444444,28.0,31680.46373737374,15610.390000000001,2.2821576763485476,"more recent, higher frequency, higher spending (relative to overall customer medians)"
+8,403,190.70967741935485,190.0,1.2555831265508686,1.0,228.24521091811417,207.50000000000003,9.289995389580453,"less recent, lower frequency, lower spending (relative to overall customer medians)"

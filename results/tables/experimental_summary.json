@@ -1,0 +1,140 @@
+{
+  "dataset": {
+    "original_transactions": 541909,
+    "cleaned_transactions": 392692,
+    "removed_records": 149217,
+    "customers": 4338,
+    "sha256": "43465a06f2ccf7c8b5bd2892bc7defb52f97487934fe93b16ae4c3936424676d",
+    "source": "https://archive.ics.uci.edu/dataset/352/online+retail"
+  },
+  "rfm": {
+    "reference_date": "2011-12-10",
+    "statistics": {
+      "count": {
+        "Recency": 4338.0,
+        "Frequency": 4338.0,
+        "Monetary": 4338.0
+      },
+      "mean": {
+        "Recency": 93.05947441217151,
+        "Frequency": 4.272014753342554,
+        "Monetary": 2048.688080682342
+      },
+      "std": {
+        "Recency": 100.01226424171828,
+        "Frequency": 7.697997826095039,
+        "Monetary": 8985.230220008294
+      },
+      "min": {
+        "Recency": 1.0,
+        "Frequency": 1.0,
+        "Monetary": 3.75
+      },
+      "25%": {
+        "Recency": 18.0,
+        "Frequency": 1.0,
+        "Monetary": 306.48249999999996
+      },
+      "50%": {
+        "Recency": 51.0,
+        "Frequency": 2.0,
+        "Monetary": 668.57
+      },
+      "75%": {
+        "Recency": 142.75,
+        "Frequency": 5.0,
+        "Monetary": 1660.5974999999999
+      },
+      "max": {
+        "Recency": 374.0,
+        "Frequency": 209.0,
+        "Monetary": 280206.02
+      },
+      "median": {
+        "Recency": 51.0,
+        "Frequency": 2.0,
+        "Monetary": 668.57
+      }
+    },
+    "clustering_customers": 4338
+  },
+  "kmeans": {
+    "tested_k": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "selected_k": 3,
+    "rationale": "Preliminary K=3: candidates within 0.03 of the best silhouette (0.4157); prefer profiles with all segments >=5% of customers, then nearest to the normalized inertia-curve elbow K=4, breaking ties toward fewer segments. Profiles describe differences in original RFM units; labels are relative descriptions, not demonstrated churn. This transparent heuristic is provisional, not proof of optimal business usefulness.",
+    "elbow_k": 4,
+    "inertia": 4299.190067675818,
+    "silhouette": 0.4156506011553123,
+    "davies_bouldin": 0.8250669233107493,
+    "calinski_harabasz": 4393.736066642546,
+    "fit_seconds": 0.025537187000054473,
+    "profiles": [
+      {
+        "Cluster": 0,
+        "customers": 2037,
+        "mean_recency": 55.249386352479135,
+        "median_recency": 46.0,
+        "mean_frequency": 2.0481099656357387,
+        "median_frequency": 2.0,
+        "mean_monetary": 612.7097314678449,
+        "median_monetary": 508.8,
+        "percentage": 46.95712309820193,
+        "description": "more recent, lower frequency, lower spending (relative to overall customer medians)"
+      },
+      {
+        "Cluster": 1,
+        "customers": 981,
+        "mean_recency": 255.61875637104995,
+        "median_recency": 253.0,
+        "mean_frequency": 1.3934760448521917,
+        "median_frequency": 1.0,
+        "mean_monetary": 397.17308970438324,
+        "median_monetary": 290.51,
+        "percentage": 22.61410788381743,
+        "description": "less recent, lower frequency, lower spending (relative to overall customer medians)"
+      },
+      {
+        "Cluster": 2,
+        "customers": 1320,
+        "mean_recency": 30.596212121212123,
+        "median_recency": 18.0,
+        "mean_frequency": 9.843181818181819,
+        "median_frequency": 7.0,
+        "mean_monetary": 5492.039674242425,
+        "median_monetary": 2570.495,
+        "percentage": 30.428769017980635,
+        "description": "more recent, higher frequency, higher spending (relative to overall customer medians)"
+      }
+    ]
+  },
+  "pca_visualization_explained_variance": [
+    0.7208121779847365,
+    0.21567275677288694
+  ],
+  "versions": {
+    "python": "3.12.14",
+    "pandas": "3.1.0",
+    "numpy": "2.5.4",
+    "scikit-learn": "1.9.1",
+    "matplotlib": "3.11.2",
+    "seaborn": "0.13.2",
+    "openpyxl": "3.1.5"
+  },
+  "timing_scope": "KMeans fit_predict only; excludes metrics, loading and plotting",
+  "limitations": [
+    "Returns excluded; Monetary is valid positive purchase value, not net revenue.",
+    "No demonstrated churn or cluster stability claim.",
+    "No automatic outlier removal.",
+    "K selection is provisional and requires domain review."
+  ]
+}

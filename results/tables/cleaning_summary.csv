@@ -1,0 +1,8 @@
+step,rows_before,rows_removed,rows_remaining,percentage_removed
+missing_customer_id,541909,135080,406829,24.926694334288598
+exact_duplicates,406829,5225,401604,1.284323388942283
+cancelled_invoices,401604,8872,392732,2.209141343213713
+invalid_quantity,392732,0,392732,0.0
+invalid_price,392732,40,392692,0.010185062587209599
+invalid_date,392692,0,392692,0.0
+missing_invoice,392692,0,392692,0.0
