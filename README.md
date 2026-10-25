@@ -3,7 +3,7 @@
 CSC 4740 Data Mining research project — Shabib Hyder Gazi and Satnam Singh Khokhar.
 
 ## Objective and preliminary scope
-Which clustering algorithm produces the most meaningful, well-defined, and stable customer segments based on purchasing behavior? The full proposal compares K-Means, DBSCAN, and Hierarchical Clustering. **This first progress-report implementation covers only exploration, cleaning, RFM features, and preliminary K-Means.** It does not establish algorithm superiority or cluster stability.
+Which clustering algorithm produces the most meaningful, well-defined, and stable customer segments based on purchasing behavior? The full proposal compares K-Means, DBSCAN, and Hierarchical Clustering.
 
 ## Dataset
 [UCI Online Retail](https://archive.ics.uci.edu/dataset/352/online+retail), Chen (2015), DOI: [10.24432/C5BW33](https://doi.org/10.24432/C5BW33). Approximately 541,909 line-item transactions, December 2010–December 2011, from a UK-based retailer. Currency: GBP (£). All countries are retained; this is not a UK-only customer analysis.
