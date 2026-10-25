@@ -1,0 +1,26 @@
+{
+  "unit_and_integration_tests": {
+    "passed": 17,
+    "failed": 0,
+    "command": "python -m pytest -q",
+    "warnings": [
+      "One expected pandas date-parsing warning from an invalid-date fixture."
+    ]
+  },
+  "dependency_check": "python -m pip check: no broken requirements",
+  "repeat_install": "pip install -r requirements-lock.txt succeeded",
+  "notebook": {
+    "synthetic_fixture_execution": "all 5 code cells passed in an isolated temporary project",
+    "real_dataset_execution": "All 5 code cells passed on actual UCI data; executed copy retained at /tmp/customer-segmentation-real-executed.ipynb; source notebook kept without large outputs."
+  },
+  "research_results": "Real UCI CLI pipeline and notebook completed successfully; K=2..10; 11 figures and actual metric/profile tables generated.",
+  "dataset_blocker": null,
+  "configuration_saved": [
+    "network.allowed_domains",
+    "install_script",
+    "start_skill"
+  ],
+  "published": null,
+  "dataset_acquisition": "Official HTTPS UCI ZIP downloaded successfully after network-settings change; raw workbook retained unchanged.",
+  "publication_note": "Latest draft saved; publication is not verified by runtime success."
+}

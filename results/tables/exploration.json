@@ -1,0 +1,93 @@
+{
+  "rows": 541909,
+  "columns": 8,
+  "dtypes": {
+    "InvoiceNo": "object",
+    "StockCode": "object",
+    "Description": "object",
+    "Quantity": "int64",
+    "InvoiceDate": "datetime64[us]",
+    "UnitPrice": "float64",
+    "CustomerID": "float64",
+    "Country": "str"
+  },
+  "missing_counts": {
+    "InvoiceNo": 0,
+    "StockCode": 0,
+    "Description": 1454,
+    "Quantity": 0,
+    "InvoiceDate": 0,
+    "UnitPrice": 0,
+    "CustomerID": 135080,
+    "Country": 0
+  },
+  "missing_percent": {
+    "InvoiceNo": 0.0,
+    "StockCode": 0.0,
+    "Description": 0.2683107311375157,
+    "Quantity": 0.0,
+    "InvoiceDate": 0.0,
+    "UnitPrice": 0.0,
+    "CustomerID": 24.926694334288598,
+    "Country": 0.0
+  },
+  "unique_customers": 4372,
+  "unique_invoices": 25900,
+  "cancelled_invoices": 3836,
+  "cancelled_rows": 9288,
+  "duplicate_rows": 5268,
+  "negative_quantity_rows": 10624,
+  "invalid_price_rows": 2517,
+  "invalid_dates": 0,
+  "date_min": "2010-12-01 08:26:00",
+  "date_max": "2011-12-09 12:50:00",
+  "purchase_statistics": {
+    "Quantity": {
+      "count": 541909.0,
+      "mean": 9.55224954743324,
+      "std": 218.08115785023386,
+      "min": -80995.0,
+      "25%": 1.0,
+      "50%": 3.0,
+      "75%": 10.0,
+      "max": 80995.0
+    },
+    "UnitPrice": {
+      "count": 541909.0,
+      "mean": 4.611113626088514,
+      "std": 96.75985306117937,
+      "min": -11062.06,
+      "25%": 1.25,
+      "50%": 2.08,
+      "75%": 4.13,
+      "max": 38970.0
+    }
+  },
+  "top_countries": {
+    "United Kingdom": 495478,
+    "Germany": 9495,
+    "France": 8557,
+    "EIRE": 8196,
+    "Spain": 2533,
+    "Netherlands": 2371,
+    "Belgium": 2069,
+    "Switzerland": 2002,
+    "Portugal": 1519,
+    "Australia": 1259
+  },
+  "monthly_transactions": {
+    "2010-12": 42481,
+    "2011-01": 35147,
+    "2011-02": 27707,
+    "2011-03": 36748,
+    "2011-04": 29916,
+    "2011-05": 37030,
+    "2011-06": 36874,
+    "2011-07": 39518,
+    "2011-08": 35284,
+    "2011-09": 50226,
+    "2011-10": 60742,
+    "2011-11": 84711,
+    "2011-12": 25525
+  }
+}
