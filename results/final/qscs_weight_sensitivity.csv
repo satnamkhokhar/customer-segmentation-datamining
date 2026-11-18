@@ -1,25 +1,25 @@
 scenario,algorithm,score
-default,kmeans,0.9056820637198941
-default,dbscan,0.8078210930013336
-default,hierarchical,0.7445060730566067
-equal,kmeans,0.9297094137459929
-equal,dbscan,0.856606222535407
-equal,hierarchical,0.7876994557332334
-quality,kmeans,0.855261544680603
-quality,dbscan,0.702290402969446
-quality,hierarchical,0.7097278961234982
-stability,kmeans,0.9549538724335782
-stability,dbscan,0.9144191502966231
-stability,hierarchical,0.717060634356232
-coverage,kmeans,0.9578256482475958
-coverage,dbscan,0.9117507321381183
-coverage,hierarchical,0.8726196734399401
-no coverage,kmeans,0.864656422293097
-no coverage,dbscan,0.7240369613338646
-no coverage,hierarchical,0.67934936213003
-no stability,kmeans,0.8666666653629093
-no stability,dbscan,0.7221690686229113
-no stability,hierarchical,0.7882406894886256
-no quality,kmeans,0.9962666914417772
+default,kmeans,0.9566196165583842
+default,dbscan,0.8183874060496468
+default,hierarchical,0.6718307517735476
+equal,kmeans,0.9674479410117043
+equal,dbscan,0.8644331210897129
+equal,hierarchical,0.7234475863714374
+quality,kmeans,0.9344651570874962
+quality,dbscan,0.7187268899334887
+quality,hierarchical,0.6451224822405546
+stability,kmeans,0.9776442836441054
+stability,dbscan,0.9191152894292067
+stability,hierarchical,0.6081860009623261
+coverage,kmeans,0.9804687646070226
+coverage,dbscan,0.9164468712707019
+coverage,hierarchical,0.8340685518228623
+no coverage,kmeans,0.9382181735505737
+no coverage,dbscan,0.7392994135147615
+no coverage,hierarchical,0.5962523239406246
+no stability,kmeans,0.9401953102246158
+no stability,dbscan,0.737431520803808
+no stability,hierarchical,0.754370109543
+no quality,kmeans,0.9963281747482077
 no quality,dbscan,0.9979364401482417
-no quality,hierarchical,0.7977732491911795
+no quality,hierarchical,0.7063526838813028

@@ -1,4 +1,4 @@
-"""CSC 4740 Streamlit dashboard: run `streamlit run app.py` from Sources/."""
+"""CSC 4740 Streamlit dashboard: run `python -m streamlit run app.py` from the repository root."""
 from pathlib import Path
 import pandas as pd
 import streamlit as st
@@ -129,4 +129,4 @@ else:
     st.code('python -m pytest -q\npython demo.py\nstreamlit run app.py\npython final_main.py --repeats 12',language='bash')
     st.write('The code lives in `src/`; `final_main.py` runs the full search and 12-trial stability experiment; `part3_sensitivity.py` runs the 15 preprocessing variants. The UI is an additional demonstration layer.')
     st.write('Key limitations: unsupervised labels are not ground truth; DBSCAN can label customers as noise; QSCS weights are subjective; silhouette can favor compact clusters over business interpretability; the reference date is fixed by the dataset, not today.')
-    st.info('For the video, run a live clustering fit, show saved full-data experiments, and demonstrate pytest in a terminal. Full parameter search is computationally expensive.')
+    st.info('Interactive clustering fits new models. Saved research results can be regenerated using the commands in README.md.')

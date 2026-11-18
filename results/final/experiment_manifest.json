@@ -1,0 +1,39 @@
+{
+  "selected": {
+    "kmeans": "kmeans_001",
+    "dbscan": "dbscan_007",
+    "hierarchical": "hierarchical_006"
+  },
+  "qscs_weights": {
+    "quality": 0.45,
+    "stability": 0.35,
+    "coverage": 0.2
+  },
+  "quality_normalization_bounds": {
+    "silhouette": {
+      "min": -0.13102603673507662,
+      "max": 0.4898089298017997
+    },
+    "davies_bouldin": {
+      "min": 0.5702943518560627,
+      "max": 1.7315606496826206
+    },
+    "calinski_harabasz": {
+      "min": 18.871120878347373,
+      "max": 4393.736066642545
+    }
+  },
+  "seed": 42,
+  "stability_repeats": 12,
+  "subsample_fraction": 0.8,
+  "customer_count": 4338,
+  "grid_silhouette_sample_size": 300,
+  "python": "3.12.4",
+  "platform": "macOS-15.7.7-arm64-arm-64bit",
+  "limitations": [
+    "DBSCAN quality excludes noise; coverage reported separately",
+    "ARI assigned subset can differ by algorithm",
+    "QSCS normalization depends on candidate pool",
+    "No external business outcome labels"
+  ]
+}

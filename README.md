@@ -523,6 +523,13 @@ By combining conventional clustering metrics, repeated stability experiments, pr
 
 The implementation includes reusable analytical code, automated tests, saved experiment results, and an interactive Streamlit application for exploring the research.
 
+
+## Submission Package (Sources)
+
+The submission ZIP contains a `Sources/` directory with the runnable implementation, `src/`, `tests/`, saved experimental results, README, and the original UCI Online Retail workbook. Open a terminal inside `Sources/` and follow Sections 12–14 to install dependencies, run tests, and launch the application. Python 3.12 is recommended. The workbook is included in the submission ZIP but excluded from the public Git repository.
+
+The final selected-model quality metrics have been regenerated and checked against the baseline rows in the preprocessing sensitivity analysis.
+
 ## 18. References
 
 Chen, D. (2015). *Online Retail*. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33
