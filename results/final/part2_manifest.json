@@ -1,0 +1,38 @@
+{
+  "source_dataset": "data/raw/Online Retail.xlsx",
+  "parameter_grid": "results/final/parameter_search.csv",
+  "selected_models": {
+    "kmeans": "kmeans_000",
+    "dbscan": "dbscan_007",
+    "hierarchical": "hierarchical_007"
+  },
+  "customer_count": 4338,
+  "repeats": 12,
+  "sample_fraction": 0.8,
+  "seed": 42,
+  "weights": {
+    "quality": 0.45,
+    "stability": 0.35,
+    "coverage": 0.2
+  },
+  "normalization_bounds": {
+    "silhouette": {
+      "min": -0.1951693962276031,
+      "max": 0.5466908886577344
+    },
+    "davies_bouldin": {
+      "min": 0.5702943518560626,
+      "max": 1.7315606496826206
+    },
+    "calinski_harabasz": {
+      "min": 115.4641090553583,
+      "max": 4393.736066642545
+    }
+  },
+  "caveats": [
+    "ARI compares the same sampled customer IDs against full-data labels",
+    "Noise-excluded ARI is conditional on shared assigned customers",
+    "QSCS is a proposed project metric, not an externally validated measure",
+    "Model selection is based on the previously saved parameter grid"
+  ]
+}

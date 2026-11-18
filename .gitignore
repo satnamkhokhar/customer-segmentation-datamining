@@ -10,3 +10,9 @@ results/models/*
 !results/models/.gitkeep
 results/figures/*
 !results/figures/.gitkeep
+
+.venv/
+__pycache__/
+.pytest_cache/
+.DS_Store
+20_MINUTE_DEMO_SCRIPT.md
