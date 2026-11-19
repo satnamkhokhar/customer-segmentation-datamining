@@ -1,251 +1,582 @@
+
 # Comparative Analysis of Clustering Algorithms for Customer Segmentation Using Purchasing Behavior
 
 **Course:** CSC 4740 — Data Mining  
-**Institution:** Georgia State University  
-**Team Members:** Satnam Singh Khokhar and Shabib Hyder Gazi
+**Team Members:** Satnam Singh Khokhar and Shabib Hyder Gazi  
+**GitHub Repository:** https://github.com/satnamkhokhar/customer-segmentation-datamining
+
+---
 
 ## 1. Project Overview
 
-Customer segmentation helps businesses understand differences in purchasing behavior and identify groups of customers with similar characteristics. This project conducts a comparative analysis of three unsupervised machine learning algorithms:
+Customer segmentation is an important application of data mining that helps businesses understand purchasing behavior by grouping customers with similar characteristics.
 
-- K-Means Clustering
-- DBSCAN (Density-Based Spatial Clustering of Applications with Noise)
-- Agglomerative Hierarchical Clustering
+This project investigates and compares three unsupervised machine learning algorithms:
 
-The study uses customer purchasing data from the UCI Online Retail dataset and constructs Recency, Frequency, and Monetary (RFM) features for each customer.
+1. K-Means Clustering
+2. DBSCAN (Density-Based Spatial Clustering of Applications with Noise)
+3. Agglomerative Hierarchical Clustering
+
+We use the UCI Online Retail dataset and construct customer-level Recency, Frequency, and Monetary Value (RFM) features.
+
+Rather than determining the best clustering algorithm using a single evaluation metric, our research examines clustering quality, stability, customer coverage, preprocessing sensitivity, computational performance, and customer segment interpretability.
 
 ### Research Question
 
 **Which clustering algorithm produces the most meaningful, well-defined, and stable customer segments based on purchasing behavior?**
 
-Rather than selecting an algorithm solely based on a single clustering metric, the project evaluates cluster quality, assignment stability, customer coverage, preprocessing sensitivity, and computational performance.
+### Original Technical Contribution
 
-The research also proposes a project-specific evaluation method, the **Quality–Stability–Coverage Score (QSCS)**, to combine several important clustering characteristics into a single comparative score.
+Our main technical contribution is the **Quality–Stability–Coverage Score (QSCS)**, a proposed composite evaluation method combining clustering quality, assignment stability, and customer coverage.
+
+We also evaluate the sensitivity of this score to different weighting configurations.
+
+QSCS is a project-specific experimental method rather than a universally validated clustering metric.
+
+---
 
 ## 2. Research Objectives
 
-The primary objectives are to:
+The main objectives of this project are:
 
 1. Clean and preprocess real-world retail transaction data.
 2. Construct customer-level RFM features.
-3. Implement and compare three clustering algorithms.
-4. Evaluate clustering quality using established internal validation metrics.
-5. Investigate cluster stability through repeated customer subsampling.
-6. Examine how preprocessing choices affect clustering assignments.
-7. Develop and evaluate a composite Quality–Stability–Coverage Score.
-8. Interpret customer segments using their original purchasing characteristics.
-9. Provide reproducible experiments, automated tests, saved results, and an interactive analytical application.
+3. Implement K-Means, DBSCAN, and Hierarchical Clustering.
+4. Compare clustering performance using established evaluation metrics.
+5. Investigate cluster stability through repeated subsampling.
+6. Examine the effects of different preprocessing techniques.
+7. Develop and evaluate the proposed QSCS metric.
+8. Interpret customer segments using their purchasing characteristics.
+9. Build an interactive application to demonstrate clustering experiments.
+10. Provide reproducible experiments, automated tests, and saved research results.
+
+---
 
 ## 3. Dataset
 
-### Data Source
+### 3.1 Data Source
 
 **Dataset:** Online Retail  
-**Repository:** UCI Machine Learning Repository  
-**DOI:** https://doi.org/10.24432/C5BW33  
-**Dataset URL:** https://archive.ics.uci.edu/dataset/352/online+retail
+**Source:** UCI Machine Learning Repository  
+**Dataset URL:** https://archive.ics.uci.edu/dataset/352/online+retail  
+**DOI:** https://doi.org/10.24432/C5BW33
 
-The dataset contains transaction records from a UK-based online retailer covering December 2010 through December 2011.
+The dataset contains transactions from a UK-based online retailer between December 2010 and December 2011.
 
-### Dataset Summary
+### 3.2 Dataset Summary
 
 | Property | Value |
-| --- | --- |
+|---|---|
 | Original transaction records | 541,909 |
-| Cleaned purchase records | 392,692 |
-| Unique customers after preprocessing | 4,338 |
-| Original dataset features | 8 |
+| Cleaned valid purchase records | 392,692 |
+| Removed records | 149,217 |
+| Unique customers | 4,338 |
+| Original dataset attributes | 8 |
 | Customer-level analytical features | 3 (RFM) |
 | Currency | GBP (£) |
+| RFM reference date | December 10, 2011 |
 
-The original fields include InvoiceNo, StockCode, Description, Quantity, InvoiceDate, UnitPrice, CustomerID, and Country.
+The original dataset contains:
 
-### Data Cleaning
+- InvoiceNo
+- StockCode
+- Description
+- Quantity
+- InvoiceDate
+- UnitPrice
+- CustomerID
+- Country
 
-The preprocessing pipeline addresses several common data-quality problems:
+### 3.3 Data Cleaning
+
+The preprocessing pipeline handles:
 
 - Missing customer identifiers
-- Duplicate transaction records
-- Cancelled invoices
+- Exact duplicate records
+- Canceled invoices
 - Nonpositive quantities
 - Invalid or nonpositive unit prices
-- Missing or invalid transaction dates
+- Invalid transaction dates
 - Missing invoice identifiers
 
-The pipeline records the effects of these cleaning operations, allowing the reduction from the original dataset to the final analytical dataset to be examined.
+After preprocessing, 392,692 valid transactions remain, representing 4,338 customers.
 
-Cancelled transactions are excluded. Consequently, the Monetary feature measures positive purchases rather than net revenue after refunds or returns.
+The cleaning process is documented in:
 
-## 4. Feature Engineering: RFM Analysis
+`results/final/cleaning_summary.csv`
 
-Each customer is represented using three purchasing-behavior features.
+Canceled transactions and returns are excluded from the primary analysis. Therefore, Monetary Value represents positive purchase spending rather than net revenue after refunds.
 
-### Recency (R)
+---
 
-The number of calendar days since the customer's most recent purchase, measured relative to one day after the latest valid transaction date.
+## 4. RFM Feature Engineering
 
-Lower Recency indicates more recent purchasing activity.
+We represent each customer using three purchasing behavior features.
 
-### Frequency (F)
+### 4.1 Recency (R)
 
-The number of distinct purchase invoices associated with a customer.
+Recency measures the number of calendar days since a customer's most recent purchase.
 
-Higher Frequency indicates more frequent purchasing activity.
+The reference date is December 10, 2011, one day after the latest valid transaction.
 
-### Monetary (M)
+**Lower Recency indicates more recent purchasing activity.**
 
-The total positive purchasing value associated with a customer:
+### 4.2 Frequency (F)
+
+Frequency measures the number of distinct purchase invoices associated with a customer.
+
+**Higher Frequency indicates more frequent purchasing activity.**
+
+### 4.3 Monetary Value (M)
+
+Monetary Value represents the total positive purchasing value of a customer.
 
 Monetary = Sum(Quantity × UnitPrice)
 
-Higher Monetary indicates greater observed purchasing value.
+**Higher Monetary Value indicates greater observed spending.**
 
-### Feature Transformation
+### 4.4 Feature Transformation
 
-The baseline feature-processing configuration uses:
+The baseline preprocessing configuration uses:
 
 - Original Recency values
-- log1p transformation of Frequency
-- log1p transformation of Monetary
+- `log1p(Frequency)`
+- `log1p(Monetary)`
 - StandardScaler normalization
 
-These transformations reduce the influence of highly skewed purchase distributions and place the features on comparable numerical scales.
+The logarithmic transformations reduce the influence of skewed purchasing distributions.
 
-Clustering is performed using the three transformed RFM features. Principal Component Analysis (PCA) is used for two-dimensional visualization, not as a replacement for the clustering features.
+StandardScaler places the features on comparable numerical scales.
+
+Clustering is performed using all three transformed RFM features.
+
+Principal Component Analysis (PCA) is used only for two-dimensional visualization.
+
+---
 
 ## 5. Clustering Algorithms
 
 ### 5.1 K-Means Clustering
 
-K-Means partitions customers into a predefined number of clusters by minimizing within-cluster variation.
+K-Means is a centroid-based clustering algorithm that partitions observations into a predefined number of clusters.
 
-The implementation evaluates candidate values of k and compares clustering solutions using quality metrics and customer segment characteristics.
+It attempts to minimize within-cluster variation by iteratively updating cluster assignments and centroids.
 
-**Strengths:** Computational efficiency, straightforward interpretation, and compact cluster assignments.
+**Advantages:**
+- Computationally efficient
+- Easy to interpret
+- Produces complete cluster assignments
+- Suitable for identifying relatively compact customer groups
 
-**Limitations:** Requires specifying the number of clusters and may be sensitive to outliers and cluster geometry.
+**Limitations:**
+- Requires specifying the number of clusters
+- Sensitive to feature scaling and outliers
+- Assumes relatively compact cluster structures
+
+Our final selected K-Means model uses:
+
+**k = 3 clusters**
 
 ### 5.2 DBSCAN
 
-DBSCAN identifies dense groups of customers based on neighborhood relationships.
+DBSCAN is a density-based clustering algorithm that groups observations according to neighborhood density.
 
-Its principal parameters are:
+Its main parameters are:
 
-- eps: Neighborhood radius
-- min_samples: Minimum number of neighboring samples needed for core-point density
+- `eps`: Neighborhood radius
+- `min_samples`: Minimum number of samples required for a dense neighborhood
 
-DBSCAN can identify irregularly shaped clusters and label some customers as noise.
+**Advantages:**
+- Does not require specifying the number of clusters
+- Can detect irregularly shaped groups
+- Identifies unusual observations as noise
 
-**Strengths:** Does not require specifying the number of clusters and explicitly identifies noise.
+**Limitations:**
+- Sensitive to parameter selection
+- Sensitive to feature scaling
+- May leave customers unassigned
 
-**Limitations:** Sensitive to feature scaling and density parameters; some customers may remain unassigned.
+Our final selected DBSCAN configuration uses:
+
+- `eps = 0.5911`
+- `min_samples = 4`
+
+It identifies two clusters and 24 noise observations.
 
 ### 5.3 Agglomerative Hierarchical Clustering
 
-Agglomerative clustering progressively combines observations into larger groups based on their similarity.
+Agglomerative Hierarchical Clustering progressively merges observations into larger groups based on similarity.
 
-The experiments examine cluster counts and linkage strategies, including Ward, complete, average, and single linkage.
+The implementation supports:
 
-**Strengths:** Supports multiple linkage definitions and provides a hierarchical perspective on customer similarity.
+- Ward linkage
+- Complete linkage
+- Average linkage
+- Single linkage
 
-**Limitations:** Can be computationally expensive and sensitive to the selected linkage criterion.
+The final parameter search evaluates Ward, complete, and average linkage.
 
-## 6. Model Evaluation
+A dendrogram is generated to illustrate hierarchical merging relationships.
 
-The project uses several complementary evaluation measures.
+**Advantages:**
+- Provides a hierarchical perspective on similarity
+- Supports multiple linkage strategies
+- Does not require random centroid initialization
 
-### Silhouette Score
+**Limitations:**
+- Can be computationally expensive
+- Sensitive to linkage selection
+- Can produce highly unbalanced clusters
 
-Measures how closely an observation matches its own cluster relative to other clusters.
+Our final selected Hierarchical configuration uses:
 
-Higher values generally indicate better separation.
+- `k = 2`
+- `linkage = average`
 
-### Davies–Bouldin Index
+---
 
-Measures cluster similarity based on within-cluster dispersion and between-cluster separation.
+## 6. Evaluation Methodology
 
-Lower values are preferred.
+We evaluate clustering algorithms using several complementary metrics.
 
-### Calinski–Harabasz Index
+### 6.1 Silhouette Score
 
-Compares between-cluster dispersion with within-cluster dispersion.
+The Silhouette Score measures how similar an observation is to its own cluster compared with neighboring clusters.
 
-Higher values generally indicate more distinct clustering structures.
+Higher values generally indicate better cluster separation.
 
-### Additional Evaluation Criteria
+For computational efficiency, our final experiments use a deterministic, cluster-aware sample of approximately 300 assigned customers for Silhouette evaluation.
 
-- Number of identified clusters
-- Customer coverage
+### 6.2 Davies–Bouldin Index
+
+The Davies–Bouldin Index evaluates cluster similarity using within-cluster dispersion and between-cluster separation.
+
+Lower values indicate better clustering.
+
+### 6.3 Calinski–Harabasz Index
+
+The Calinski–Harabasz Index compares between-cluster dispersion with within-cluster dispersion.
+
+Higher values generally indicate more distinct clusters.
+
+### 6.4 Additional Metrics
+
+We also evaluate:
+
+- Number of clusters
 - Number of noise observations
+- Customer coverage
 - Model fitting time
-- Customer segment sizes
-- RFM-based cluster profiles
+- Cluster sizes
+- Customer RFM profiles
+- Assignment stability
 
-For DBSCAN, internal quality metrics are computed on assigned customers, excluding noise. Coverage is reported separately to avoid interpreting a high quality score without considering excluded customers.
+For DBSCAN, internal quality metrics are computed on customers assigned to non-noise clusters.
 
-Metrics that require at least two valid clusters are treated as undefined when that requirement is not met.
+Customer coverage is reported separately.
 
-## 7. Cluster Stability Analysis
+Metrics requiring at least two valid clusters are treated as undefined when this condition is not satisfied.
 
-A clustering solution should ideally remain reasonably consistent when the dataset changes slightly.
+---
 
-To evaluate this property, the project performs **12 seeded subsampling trials**, each using **80% of customers**.
+## 7. Parameter Search and Model Selection
 
-The Adjusted Rand Index (ARI) measures agreement between cluster assignments while accounting for agreement expected by chance.
+We evaluate multiple parameter configurations for each clustering algorithm.
 
-Assignments are compared using matching customer identifiers, rather than assuming that cluster numbers have the same meaning across model fits.
+### K-Means
 
-The analysis records stability statistics and related coverage information.
+The final comparative parameter search evaluates:
 
-For DBSCAN, stability measurements based only on assigned customers must be interpreted alongside noise and coverage diagnostics.
+`k = 2, 3, 4, 5, 6`
 
-## 8. Original Technical Contribution: QSCS
+The original mid-project pipeline also explored k values from 2 through 10.
 
-### Quality–Stability–Coverage Score
+### DBSCAN
 
-A central contribution of this project is the proposed **Quality–Stability–Coverage Score (QSCS)**.
+We evaluate combinations of:
 
-Standard clustering evaluation often emphasizes internal cluster quality. However, a clustering solution may achieve strong separation while producing unstable assignments or excluding a substantial proportion of customers.
+- Neighborhood radius (`eps`)
+- Minimum samples (`min_samples`)
 
-QSCS combines three components:
+Candidate epsilon values are derived from nearest-neighbor distance distributions.
 
-- **Q — Quality:** A normalized combination of Silhouette, inverse Davies–Bouldin, and Calinski–Harabasz metrics.
-- **S — Stability:** A normalized measure derived from Adjusted Rand Index.
-- **C — Coverage:** The proportion of customers assigned to non-noise clusters.
+### Hierarchical Clustering
 
-### Proposed Formula
+We evaluate:
 
-QSCS = 0.45 × Q + 0.35 × S + 0.20 × C
+- Cluster counts from 2 through 4
+- Ward, complete, and average linkage
 
-The weights assign 45% importance to clustering quality, 35% to stability, and 20% to customer coverage.
+The selected configuration for each algorithm is determined using a ranking based on Silhouette Score with a customer coverage penalty.
 
-The project also examines alternative weighting configurations to determine how sensitive algorithm rankings are to the chosen priorities.
+For DBSCAN, candidate configurations must also satisfy a minimum coverage threshold of 80%.
 
-QSCS is a **project-specific experimental evaluation method**, not an externally validated universal metric. Its normalization depends on the candidate models being compared, and its weights represent explicit research choices.
+The complete parameter search results are saved in:
 
-## 9. Preprocessing Sensitivity Experiments
+`results/final/parameter_search.csv`
 
-Customer segmentation results can change substantially depending on how features are transformed.
+Selected configurations are saved in:
 
-The project evaluates five preprocessing configurations:
+`results/final/algorithm_comparison.csv`
 
-1. Baseline transformation
-2. Log transformations applied to all RFM features
-3. Raw feature scaling
-4. Robust scaling
-5. Winsorization-based preprocessing
+---
 
-Each configuration is evaluated using the selected K-Means, DBSCAN, and Hierarchical Clustering models.
+## 8. Cluster Stability Analysis
 
-This produces **15 algorithm-by-preprocessing comparisons**.
+A clustering solution should ideally remain reasonably consistent when the dataset changes.
 
-The experiments measure changes in clustering quality, customer coverage, execution time, and assignment agreement with the baseline using ARI.
+To evaluate this property, we conduct repeated customer subsampling experiments.
 
-Selected model parameters are held constant across transformations to isolate preprocessing effects. These experiments therefore measure sensitivity under fixed parameters rather than the best result obtainable after retuning each variant.
+### Experimental Setup
 
-## 10. Project Structure
+- Number of trials: 12 per algorithm
+- Subsample fraction: 80%
+- Base random seed: 42
+- Stability metric: Adjusted Rand Index (ARI)
 
-The repository is organized as follows:
+For each trial:
+
+1. Select 80% of customers using a controlled random seed.
+2. Fit the selected clustering algorithm on the subset.
+3. Compare the subset assignments with the original model's assignments for the same customers.
+4. Calculate ARI.
+5. Aggregate the results across all trials.
+
+ARI is invariant to the numerical names assigned to clusters.
+
+A value close to 1 indicates strong agreement, while a value near 0 indicates agreement close to chance.
+
+For DBSCAN, assigned-customer ARI excludes observations classified as noise in either compared solution. Coverage overlap and noise agreement are recorded separately.
+
+### Stability Results
+
+| Algorithm | Mean ARI | Valid Trials |
+|---|---:|---:|
+| K-Means | 0.9887 | 12 |
+| DBSCAN | 0.9996 | 12 |
+| Hierarchical | 0.0965 | 12 |
+
+K-Means and DBSCAN demonstrate strong stability under the selected experimental procedure.
+
+Hierarchical Clustering demonstrates substantially lower stability.
+
+Results are saved in:
+
+- `results/final/stability_trials.csv`
+- `results/final/stability_summary.csv`
+
+---
+
+## 9. Original Technical Contribution: QSCS
+
+### 9.1 Motivation
+
+Traditional clustering evaluation frequently emphasizes internal cluster quality.
+
+However, a clustering solution may achieve strong separation while producing unstable assignments or excluding a significant proportion of customers.
+
+To investigate this issue, we propose the **Quality–Stability–Coverage Score (QSCS)**.
+
+### 9.2 QSCS Formula
+
+QSCS = 0.45Q + 0.35S + 0.20C
+
+Where:
+
+- **Q:** Normalized clustering quality
+- **S:** Normalized assignment stability
+- **C:** Customer coverage
+
+### 9.3 Quality Component
+
+Quality combines:
+
+1. Silhouette Score
+2. Inverted Davies–Bouldin Index
+3. Calinski–Harabasz Index
+
+Each metric is normalized using minimum and maximum values from the valid candidate model pool.
+
+The normalized Davies–Bouldin value is inverted because lower original values are preferred.
+
+The three normalized values are averaged to calculate Q.
+
+### 9.4 Stability Component
+
+The stability component is calculated using the mean ARI:
+
+S = (Mean ARI + 1) / 2
+
+This transforms ARI into a zero-to-one scale.
+
+### 9.5 Coverage Component
+
+Coverage represents the proportion of customers assigned to non-noise clusters:
+
+C = Assigned Customers / Total Customers
+
+### 9.6 Weight Selection
+
+Our default weights are:
+
+- Quality: 45%
+- Stability: 35%
+- Coverage: 20%
+
+These weights represent our research priorities rather than universally optimal values.
+
+### 9.7 QSCS Results
+
+| Algorithm | QSCS |
+|---|---:|
+| K-Means | 0.9566 |
+| DBSCAN | 0.8184 |
+| Hierarchical | 0.6718 |
+
+**K-Means achieves the highest overall QSCS under our default weighting configuration.**
+
+### 9.8 QSCS Weight Sensitivity
+
+We also evaluate alternative weighting configurations, including:
+
+- Equal weights
+- Quality-focused weights
+- Stability-focused weights
+- Coverage-focused weights
+- Removing one component at a time
+
+These experiments demonstrate how the relative importance of evaluation criteria affects algorithm rankings.
+
+For example, when quality receives zero weight and stability and coverage receive greater importance, DBSCAN narrowly outranks K-Means.
+
+Results are saved in:
+
+- `results/final/qscs_comparison.csv`
+- `results/final/qscs_weight_sensitivity.csv`
+
+QSCS is a project-specific experimental contribution. Its normalization depends on the evaluated candidate models, and it has not been externally validated as a universal measure of business usefulness.
+
+---
+
+## 10. Preprocessing Sensitivity Analysis
+
+Clustering results can be influenced by feature transformations and scaling.
+
+We evaluate five preprocessing configurations:
+
+1. **Baseline:** Log-transformed Frequency and Monetary with StandardScaler
+2. **All Log:** Log transformation applied to all three RFM features
+3. **Raw:** Original RFM features with StandardScaler
+4. **Robust:** Log-transformed Frequency and Monetary with RobustScaler
+5. **Winsor:** Winsorization-based preprocessing with StandardScaler
+
+Each configuration is tested using the selected K-Means, DBSCAN, and Hierarchical Clustering models.
+
+This produces:
+
+**5 preprocessing configurations × 3 algorithms = 15 experiments**
+
+We compare:
+
+- Silhouette Score
+- Davies–Bouldin Index
+- Calinski–Harabasz Index
+- Customer coverage
+- Execution time
+- ARI relative to baseline assignments
+
+The selected algorithm parameters remain fixed across preprocessing variants.
+
+This allows us to isolate preprocessing effects rather than retuning each model for every variant.
+
+### Main Observations
+
+- K-Means remains relatively consistent under RobustScaler and winsorization.
+- DBSCAN can produce only one usable cluster under some preprocessing choices.
+- Hierarchical Clustering shows substantial assignment sensitivity to feature transformations.
+- High numerical cluster separation does not necessarily imply stable or practically useful segmentation.
+
+Results are saved in:
+
+`results/final/feature_sensitivity.csv`
+
+---
+
+## 11. Final Experimental Results
+
+The final experiments use 4,338 customer records.
+
+### 11.1 Algorithm Comparison
+
+| Algorithm | Clusters | Silhouette | Davies–Bouldin | Calinski–Harabasz | Coverage |
+|---|---:|---:|---:|---:|---:|
+| K-Means | 3 | 0.4547 | 0.8251 | 4393.74 | 100% |
+| DBSCAN | 2 | 0.3202 | 1.1265 | 2421.55 | 99.45% |
+| Hierarchical | 2 | 0.4898 | 0.7255 | 18.87 | 100% |
+
+### 11.2 K-Means Customer Segments
+
+| Cluster | Customers | Percentage | Interpretation |
+|---|---:|---:|---|
+| 0 | 2,037 | 46.96% | Relatively recent, lower-frequency and lower-spending customers |
+| 1 | 981 | 22.61% | Less recent, lower-frequency and lower-spending customers |
+| 2 | 1,320 | 30.43% | Recent, high-frequency and high-spending customers |
+
+The selected K-Means model produces three interpretable purchasing-behavior groups.
+
+These groups may help businesses investigate retention, engagement, and customer relationship strategies.
+
+### 11.3 DBSCAN Customer Segments
+
+DBSCAN identifies:
+
+- Cluster 0: 2,824 customers
+- Cluster 1: 1,490 customers
+- Noise: 24 customers
+
+The noise observations include customers with unusual purchasing patterns.
+
+These customers should not automatically be interpreted as fraudulent or undesirable.
+
+### 11.4 Hierarchical Customer Segments
+
+The selected Hierarchical model identifies:
+
+- Cluster 0: 4,334 customers
+- Cluster 1: 4 customers
+
+This highly unbalanced result illustrates an important limitation of relying exclusively on cluster separation metrics.
+
+Although the selected Hierarchical model has the highest Silhouette Score, it provides limited differentiation across most customers and demonstrates low subsampling stability.
+
+### 11.5 Main Research Finding
+
+**The algorithm with the highest Silhouette Score is not necessarily the best overall customer segmentation solution.**
+
+Hierarchical Clustering achieves the highest selected-model Silhouette Score, but its segmentation is extremely unbalanced and unstable under our subsampling procedure.
+
+DBSCAN demonstrates strong assigned-customer stability but introduces noise handling and coverage considerations.
+
+K-Means achieves:
+
+- Three interpretable customer groups
+- Strong stability
+- Complete customer coverage
+- The highest QSCS under our default weights
+
+Therefore, K-Means offers the strongest overall balance for this dataset under our proposed evaluation framework.
+
+This conclusion is specific to the experimental conditions and does not establish that K-Means is universally superior.
+
+---
+
+## 12. Project Architecture and File Structure
+
+The project follows the pipeline:
+
+Data Input → Data Cleaning → RFM Feature Engineering → Feature Transformation → Clustering → Evaluation → Visualization
+
+### Main Project Structure
 
 ```text
 customer-segmentation-datamining/
@@ -261,6 +592,7 @@ customer-segmentation-datamining/
 ├── requirements-lock.txt
 ├── README.md
 ├── src/
+│   ├── __init__.py
 │   ├── data_loader.py
 │   ├── preprocessing.py
 │   ├── rfm_analysis.py
@@ -273,52 +605,73 @@ customer-segmentation-datamining/
 │   ├── test_final_research.py
 │   ├── test_part2.py
 │   ├── test_part3.py
-│   └── test_dashboard_logic.py
+│   ├── test_dashboard_logic.py
+│   └── test_baseline_consistency.py
 ├── notebooks/
 │   └── 01_customer_segmentation.ipynb
 ├── data/
-│   └── raw/
+│   ├── raw/
+│   └── processed/
 └── results/
     ├── tables/
     └── final/
         ├── algorithm_comparison.csv
         ├── parameter_search.csv
-        ├── stability_summary.csv
         ├── stability_trials.csv
+        ├── stability_summary.csv
         ├── qscs_comparison.csv
         ├── qscs_weight_sensitivity.csv
         ├── feature_sensitivity.csv
         ├── kmeans_profiles.csv
         ├── dbscan_profiles.csv
         ├── hierarchical_profiles.csv
+        ├── experiment_manifest.json
         └── figures/
 ```
 
 ### Important Files
 
 | File | Purpose |
-| --- | --- |
-| main.py | Original preprocessing, RFM, and K-Means analysis |
-| final_main.py | Full comparative clustering experiments |
-| part2_stability_qscs.py | Stability evaluation and QSCS computation |
-| part3_sensitivity.py | Preprocessing sensitivity analysis |
-| part4_report.py | Generation of experimental figures and QSCS weight comparisons |
-| app.py | Interactive Streamlit application |
-| dashboard_logic.py | Testable analytical operations used by Streamlit |
-| demo.py | Console-based summary of saved experimental results |
-| src/ | Core data processing, modeling, and evaluation implementation |
-| tests/ | Automated tests |
-| results/final/ | Experimental data, comparisons, profiles, and visualizations |
+|---|---|
+| `main.py` | Original preprocessing, RFM, and K-Means analysis |
+| `final_main.py` | Final clustering comparison and research experiments |
+| `part2_stability_qscs.py` | Stability and QSCS experiments |
+| `part3_sensitivity.py` | Preprocessing sensitivity analysis |
+| `part4_report.py` | Regenerates research figures and weight-sensitivity results |
+| `app.py` | Interactive Streamlit dashboard |
+| `dashboard_logic.py` | Analytical functions supporting the dashboard |
+| `demo.py` | Console demonstration of saved experimental results |
+| `src/` | Core implementation modules |
+| `tests/` | Automated tests |
+| `results/final/` | Final experimental results and figures |
 
-## 11. Software Requirements
+---
 
-The project uses Python 3.11 or later, with Python 3.12 recommended.
+## 13. Software Requirements and Installation
 
-Primary libraries include:
+### 13.1 System Requirements
+
+The project uses:
+
+- Python 3.11 or later
+- Python 3.12 recommended
+- Windows, macOS, or Linux
+- Internet connection for initial dependency installation and dataset download
+
+The saved final research manifest records:
+
+- Python 3.12.4
+- macOS 15.7.7 on ARM64
+- Random seed 42
+
+### 13.2 Main Python Dependencies
+
+The project uses:
 
 - pandas
 - NumPy
 - scikit-learn
+- SciPy
 - Matplotlib
 - seaborn
 - openpyxl
@@ -326,214 +679,369 @@ Primary libraries include:
 - Plotly
 - pytest
 - Jupyter
+- threadpoolctl
 
-Package requirements are maintained in `requirements.txt`.
+The required package versions and constraints are maintained in `requirements.txt`.
 
-The existing `requirements-lock.txt` reflects an earlier environment snapshot and does not include the later Streamlit additions. Use `requirements.txt` for the complete application.
+The older `requirements-lock.txt` represents an earlier environment snapshot. Use `requirements.txt` for the complete current application.
 
-## 12. Installation
-
-Clone the repository:
+### 13.3 Clone the Repository
 
 ```bash
 git clone https://github.com/satnamkhokhar/customer-segmentation-datamining.git
+
 cd customer-segmentation-datamining
 ```
 
-Create a Python virtual environment:
+If using the professor's `Sources` submission package, extract it and open a terminal inside the `Sources` directory instead.
+
+### 13.4 Create a Virtual Environment
 
 ```bash
 python3 -m venv .venv
 ```
 
-Activate it on macOS or Linux:
+Activate on macOS or Linux:
 
 ```bash
 source .venv/bin/activate
 ```
 
-On Windows, activate the environment using the appropriate command for Command Prompt or PowerShell.
+Activate on Windows PowerShell:
 
-Install dependencies:
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+### 13.5 Install Dependencies
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-All commands in this README should be executed from the **repository root directory**.
+Run all subsequent commands from the project root directory or extracted `Sources` directory.
 
-### Dataset Setup
+### 13.6 Dataset Setup
 
-The original Excel workbook is not included in the Git repository.
+The original dataset workbook is not tracked in the public GitHub repository.
 
-Download the Online Retail dataset from the UCI Machine Learning Repository, extract the Excel workbook, and place it at:
+Download the Online Retail dataset from:
+
+https://archive.ics.uci.edu/dataset/352/online+retail
+
+Extract the workbook and place it at:
 
 ```text
 data/raw/Online Retail.xlsx
 ```
 
-Alternatively, download it using:
+Alternatively, use:
 
 ```bash
 python main.py --download
 ```
 
-An internet connection is required for initial dataset download and dependency installation. Once the dataset and dependencies are available, the analyses can run locally.
+The professor's final `Sources` submission package should include the workbook so the project can be executed without downloading the dataset separately.
 
-## 13. Running the Project
+---
 
-### 13.1 Interactive Streamlit Application
+## 14. Running the Project
 
-Launch the application:
+### 14.1 Launch the Interactive Dashboard
 
 ```bash
 python -m streamlit run app.py
 ```
 
-The application is typically available at:
+The application is normally accessible at:
 
 http://localhost:8501
 
-The interface contains six analytical sections:
+The dashboard contains six sections.
 
-| Section | Functionality |
-| --- | --- |
-| Overview & RFM | Data cleaning statistics and RFM distributions |
-| Live Clustering | Fit clustering models using selectable algorithms, parameters, and preprocessing |
-| Algorithm Comparison | Compare saved full-dataset clustering metrics and segment profiles |
-| Stability & QSCS | Explore stability statistics and adjust composite score weights |
-| Preprocessing Sensitivity | Examine changes in clustering results across feature transformations |
-| Code & Methodology | Review reproducibility instructions and methodological considerations |
+**1. Overview & RFM**
 
-The Live Clustering section performs actual model fitting on the selected customer sample.
+Displays:
 
-The comparison sections use saved experimental results so that the application can display full-dataset analyses without rerunning the complete parameter search during every interaction.
+- Original and cleaned transaction counts
+- Unique customer count
+- Cleaning ledger
+- RFM customer records
+- Interactive RFM distributions
 
-### 13.2 Run the Original Pipeline
+**2. Live Clustering**
+
+Allows users to:
+
+- Select K-Means, DBSCAN, or Hierarchical Clustering
+- Choose preprocessing configurations
+- Adjust model parameters
+- Select customer sample size
+- Fit clustering models interactively
+- View clustering metrics
+- Explore PCA visualizations
+- Examine customer segment profiles
+- Download segment profiles as CSV
+
+**3. Algorithm Comparison**
+
+Displays:
+
+- Full-dataset algorithm comparison
+- Silhouette Score
+- Davies–Bouldin Index
+- Calinski–Harabasz Index
+- Coverage
+- Execution time
+- Customer segment profiles
+
+**4. Stability & QSCS**
+
+Displays:
+
+- Stability results
+- Mean ARI comparisons
+- QSCS component scores
+- Interactive QSCS weight adjustments
+- Algorithm rankings
+
+**5. Preprocessing Sensitivity**
+
+Displays:
+
+- Results for five preprocessing configurations
+- Comparisons across three algorithms
+- ARI relative to baseline
+- Clustering quality and coverage changes
+
+**6. Code & Methodology**
+
+Provides:
+
+- Methodology explanation
+- Implementation overview
+- Reproducibility commands
+- Research considerations and limitations
+
+The Live Clustering section fits models interactively.
+
+The comparison sections use saved full-dataset research outputs to avoid repeating expensive experiments during every dashboard interaction.
+
+### 14.2 Run the Original Analysis
 
 ```bash
 python main.py
 ```
 
-### 13.3 Run the Full Comparative Analysis
+This runs the original preprocessing, RFM, and K-Means pipeline.
+
+### 14.3 Run the Full Comparative Research
 
 ```bash
 python final_main.py --repeats 12
 ```
 
-This executes the comparative clustering research workflow, including model selection and stability evaluation.
+This performs:
 
-The full experiment can be computationally expensive.
+- Dataset preprocessing
+- RFM feature engineering
+- Clustering parameter search
+- Model selection
+- Stability experiments
+- QSCS evaluation
+- Preprocessing comparisons
+- Research result generation
 
-### 13.4 Run Stability and QSCS Experiments
+The full experiment may take some time depending on hardware.
+
+### 14.4 Run Stability and QSCS Experiments
 
 ```bash
 python part2_stability_qscs.py --repeats 12
 ```
 
-This uses the saved parameter search to evaluate selected clustering configurations.
-
-### 13.5 Run Preprocessing Sensitivity Analysis
+### 14.5 Run Preprocessing Sensitivity Analysis
 
 ```bash
 python part3_sensitivity.py
 ```
 
-### 13.6 Regenerate Figures
+### 14.6 Regenerate Research Figures
 
 ```bash
 python part4_report.py
 ```
 
-This regenerates comparison figures and the QSCS weight-sensitivity output using saved experimental tables.
-
-### 13.7 Inspect Saved Results
+### 14.7 Display Saved Experimental Results
 
 ```bash
 python demo.py
 ```
 
-This displays saved clustering comparisons, stability summaries, QSCS scores, and customer segment profiles without repeating expensive model fitting.
+This prints:
 
-**Note:** Rerunning experiment scripts may overwrite existing result files. Preserve copies of results when comparing different experimental configurations.
+- Selected algorithm comparison
+- Stability summary
+- QSCS scores
+- Preprocessing experiment count
+- Customer segment profiles
+- Saved figures
 
-## 14. Automated Testing
+This command does not require retraining all models.
 
-The project includes automated tests for:
+**Note:** Rerunning experiments can overwrite saved results. Preserve copies if comparing different experiment configurations.
 
-- Data preprocessing and validation
-- Clustering and research calculations
-- Stability analysis
-- QSCS computation
+---
+
+## 15. Automated Testing
+
+The project includes automated tests covering:
+
+- Dataset validation
+- Missing and invalid data
+- Duplicate transaction handling
+- RFM calculations
+- Feature transformations
+- K-Means clustering
+- Final clustering evaluation
+- Stability calculations
+- QSCS calculations and weight validation
 - Preprocessing sensitivity
 - Dashboard analytical functions
+- Baseline metric consistency
 
-Run the complete test suite:
+Run the test suite using:
 
 ```bash
 python -m pytest -q
 ```
 
-The current integrated project was locally tested with **33 passing tests**.
+The test suite includes synthetic fixtures to validate individual operations.
 
-The tests provide implementation-level validation; they do not establish that any particular segmentation is objectively correct or commercially optimal.
+Research results are generated from the real UCI Online Retail dataset, not synthetic data.
 
-## 15. Experimental Outputs
+Automated tests verify implementation behavior but do not establish that any particular customer segmentation is objectively correct or commercially optimal.
 
-The `results/final/` directory contains the saved results of the comparative research.
+---
 
-Important outputs include:
+## 16. Experimental Results and Visualizations
 
-- `algorithm_comparison.csv`: Selected algorithm performance metrics
-- `parameter_search.csv`: Evaluated clustering configurations
-- `stability_trials.csv`: Individual stability experiments
-- `stability_summary.csv`: Aggregated stability statistics
-- `qscs_comparison.csv`: Quality, stability, coverage, and QSCS results
-- `qscs_weight_sensitivity.csv`: Alternative QSCS weighting scenarios
-- `feature_sensitivity.csv`: Preprocessing sensitivity comparisons
-- `kmeans_profiles.csv`: K-Means segment characteristics
-- `dbscan_profiles.csv`: DBSCAN segment characteristics
-- `hierarchical_profiles.csv`: Hierarchical segment characteristics
-- `figures/`: Saved visual comparisons
+The final research outputs are saved in:
 
-The original mid-project K-Means experiment selected k = 3, while the final comparative search selected k = 2 using a different model-selection procedure.
+```text
+results/final/
+```
 
-These represent different stages of the analysis and should not be interpreted as identical experiments.
+### Experimental Tables
 
-## 16. Research Limitations
+| File | Description |
+|---|---|
+| `parameter_search.csv` | Evaluated clustering parameter configurations |
+| `algorithm_comparison.csv` | Selected algorithm performance |
+| `stability_trials.csv` | Individual stability experiments |
+| `stability_summary.csv` | Aggregated stability results |
+| `qscs_comparison.csv` | Quality, stability, coverage, and QSCS |
+| `qscs_weight_sensitivity.csv` | Alternative QSCS weighting experiments |
+| `feature_sensitivity.csv` | Preprocessing sensitivity results |
+| `kmeans_profiles.csv` | K-Means customer segment characteristics |
+| `dbscan_profiles.csv` | DBSCAN customer segment characteristics |
+| `hierarchical_profiles.csv` | Hierarchical customer segment characteristics |
+| `experiment_manifest.json` | Experiment configuration and reproducibility metadata |
 
-Several limitations should be considered when interpreting the findings.
+### Generated Figures
 
-1. **No external ground-truth labels:** The dataset does not provide objectively correct customer segment labels.
-2. **Dependence on preprocessing:** Scaling, transformations, and outlier treatment can change clustering outcomes.
-3. **Internal metric limitations:** Strong clustering scores do not automatically establish business usefulness.
-4. **DBSCAN coverage:** Density-based clustering may leave some customers classified as noise.
-5. **Stability interpretation:** Assignment agreement under subsampling is informative but does not guarantee stability under future customer behavior.
-6. **QSCS weighting:** Composite scores depend on researcher-selected weights and normalization boundaries.
-7. **Historical dataset:** The results describe purchasing behavior in the dataset's original time period, not current consumer behavior.
-8. **Business interpretation:** The project identifies purchasing-behavior groups but does not establish causal relationships or predict churn.
+The `results/final/figures/` directory contains:
 
-## 17. Conclusion
+- `algorithm_silhouette.png`
+- `algorithm_coverage.png`
+- `stability.png`
+- `qscs.png`
+- `preprocessing_sensitivity.png`
+- `qscs_weight_sensitivity.png`
+- `dbscan_noise.png`
+- `dendrogram.png`
 
-This project provides a reproducible comparison of K-Means, DBSCAN, and Agglomerative Hierarchical Clustering for customer segmentation using real retail purchasing data.
+These figures illustrate clustering quality, stability, coverage, preprocessing effects, QSCS results, and hierarchical relationships.
 
-Its principal contribution is an evaluation framework that considers not only cluster separation but also assignment stability and customer coverage.
+The dendrogram is generated using Ward linkage on a sampled set of customers for illustrative purposes. It does not represent the exact selected average-linkage model.
 
-By combining conventional clustering metrics, repeated stability experiments, preprocessing sensitivity analysis, and the proposed QSCS method, the project supports a more comprehensive comparison of unsupervised customer segmentation techniques.
+---
 
-The implementation includes reusable analytical code, automated tests, saved experiment results, and an interactive Streamlit application for exploring the research.
+## 17. Research Limitations
 
+Our study has several limitations.
 
-## Submission Package (Sources)
+1. **Historical dataset:** The Online Retail dataset represents purchasing behavior from 2010–2011 and may not reflect current retail patterns.
 
-The submission ZIP contains a `Sources/` directory with the runnable implementation, `src/`, `tests/`, saved experimental results, README, and the original UCI Online Retail workbook. Open a terminal inside `Sources/` and follow Sections 12–14 to install dependencies, run tests, and launch the application. Python 3.12 is recommended. The workbook is included in the submission ZIP but excluded from the public Git repository.
+2. **Single retailer:** Results may not generalize to other businesses or industries.
 
-The final selected-model quality metrics have been regenerated and checked against the baseline rows in the preprocessing sensitivity analysis.
+3. **No ground-truth labels:** The dataset does not contain verified customer segment labels.
 
-## 18. References
+4. **No measured business outcomes:** The project evaluates segmentation properties but does not demonstrate improvements in customer retention, marketing conversion, or revenue.
 
-Chen, D. (2015). *Online Retail*. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33
+5. **Excluded returns:** Monetary Value measures positive purchases rather than net revenue after refunds.
 
-scikit-learn Developers. *scikit-learn User Guide*. https://scikit-learn.org/stable/user_guide.html
+6. **DBSCAN noise handling:** Quality and assigned-customer stability metrics must be interpreted alongside coverage and noise statistics.
 
-Streamlit. *Streamlit Documentation*. https://docs.streamlit.io/
+7. **Sampled Silhouette:** The final Silhouette metric is calculated on a deterministic sample for computational efficiency.
+
+8. **QSCS assumptions:** The score depends on researcher-defined weights and candidate-pool normalization.
+
+9. **Preprocessing sensitivity:** Selected hyperparameters remain fixed across preprocessing variants, so the results do not represent separately optimized models for each transformation.
+
+10. **Hierarchical cluster imbalance:** The selected Hierarchical solution separates only four customers from the remaining population, limiting its usefulness as a broad customer segmentation.
+
+---
+
+## 18. Learning Outcomes
+
+Through this project, we gained practical experience in:
+
+- Real-world data cleaning and validation
+- RFM feature engineering
+- Unsupervised machine learning
+- Clustering parameter selection
+- Internal clustering evaluation
+- Stability analysis using Adjusted Rand Index
+- Designing custom evaluation metrics
+- Controlled preprocessing experiments
+- Customer segment interpretation
+- Scientific visualization
+- Interactive dashboard development
+- Modular Python implementation
+- Automated testing
+- Reproducible experimental research
+
+The project also demonstrated that strong numerical performance on one metric does not necessarily imply meaningful, stable, or useful customer groups.
+
+Individual team member contributions, teamwork experiences, and group member evaluation are documented separately in the final project report.
+
+---
+
+## 19. References
+
+1. Chen, D. (2015). Online Retail. UCI Machine Learning Repository. https://doi.org/10.24432/C5BW33
+
+2. Hughes, A. M. (1994). Strategic Database Marketing. Probus Publishing.
+
+3. Fader, P. S., Hardie, B. G. S., & Lee, K. L. (2005). RFM and CLV: Using iso-value curves for customer base analysis. Journal of Marketing Research, 42(4), 415–430.
+
+4. MacQueen, J. (1967). Some methods for classification and analysis of multivariate observations. Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability.
+
+5. Ester, M., Kriegel, H.-P., Sander, J., & Xu, X. (1996). A density-based algorithm for discovering clusters in large spatial databases with noise. Proceedings of KDD-96.
+
+---
+
+## Conclusion
+
+This project demonstrates how different clustering algorithms identify customer segments from purchasing behavior and why clustering evaluation should consider more than a single numerical metric.
+
+Using the UCI Online Retail dataset, we implemented and evaluated K-Means, DBSCAN, and Hierarchical Clustering on 4,338 customer records.
+
+Our experiments examined clustering quality, stability, preprocessing sensitivity, customer coverage, and segment interpretability.
+
+We also proposed the Quality–Stability–Coverage Score (QSCS), which combines multiple evaluation dimensions into a single transparent comparison framework.
+
+Under our default QSCS weights, **K-Means achieved the highest overall score**, producing three interpretable customer groups with strong stability and complete coverage.
+
+The project highlights the importance of evaluating clustering algorithms through multiple complementary criteria rather than relying exclusively on cluster separation.
